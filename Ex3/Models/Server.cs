@@ -22,8 +22,8 @@ namespace Ex3.Models
 
         public void Connect(string ip, int port)
         {
-            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
-            tcpClient.Connect(endPoint);
+            IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ip), port);
+            tcpClient.Connect(ep);
         }
 
         public double Get(string requestPath)
@@ -38,7 +38,6 @@ namespace Ex3.Models
                 byte[] encoded = Encoding.ASCII.GetBytes("get " + requestPath + "\r\n");
                 stream.Write(encoded, 0, encoded.Length);
                 stream.Flush();
-
                 stream.Read(response, 0, size);
             }
 
