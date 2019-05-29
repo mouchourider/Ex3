@@ -67,4 +67,3 @@ C:\Users\Francki\source\repos\Ex3\Ex3\obj\Debug\Ex3.csproj.CoreCompileInputs.cac
 C:\Users\Francki\source\repos\Ex3\Ex3\obj\Debug\Ex3.csproj.CopyComplete
 C:\Users\Francki\source\repos\Ex3\Ex3\obj\Debug\Ex3.dll
 C:\Users\Francki\source\repos\Ex3\Ex3\obj\Debug\Ex3.pdb
-C:\Users\Francki\source\repos\Ex3\Ex3\bin\App_Data\map.png
