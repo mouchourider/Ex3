@@ -14,10 +14,11 @@
     <span style="display:none;">
         <img id="map" onload="drawImage" src="~/Images/map.png" alt="The Map">
     </span>
-    
+
     <div>
 
         <script>
+            var IntervalTime = @Session["time"] * 1000
             var img = document.getElementById("map");
             var imgs = new Image();
             imgs.src = './Images/map.png';
@@ -32,21 +33,74 @@
             function drawImage() {
                 ctx.drawImage(img, 0, 0);
             }
-            function loadCanvas() {
+            function sleep(milliseconds) {
+              var start = new Date().getTime();
+              for (var i = 0; i < 1e7; i++) {
+                if ((new Date().getTime() - start) > milliseconds){
+                  break;
+                }
+              }
+            }
+            function lonTrans(l, w){
+                var half = w / 2;
+                if (l < 0) {
+                    l = ((half * l) / 180) * (-1);
+                    l = l + half;
+                }
+                else {
+                    l = ((half * l) / 180) * (-1);
+                    l = half - l;
+                }
+                return l;
+            }
+            function latTrans(l, h){
+                var half =h / 2;
+                if (l < 0) {
+                    l = ((half * l) / 90) * (-1);
+                    l = l + half;
+                }
+                else {
+                    l = ((half * l) / 90) * (-1);
+                    l = half - l;
+                }
+                return l;
+            }
+            function loadCanvas(img) {
                 drawImage();
                 ctx.beginPath();
-                ctx.moveTo(0, 0);
-                ctx.lineTo(200, 100);
-                ctx.moveTo(200, 100);
-                ctx.lineTo(400, 400);
-                ctx.moveTo(400, 400);
-                ctx.lineTo(900, 1200);
-                ctx.moveTo(900, 1200);
-                ctx.lineTo(2000, 1400);
+                ctx.strokeStyle = "red";
+                ctx.arc(preLon, preLat, 20, 0, 20 * Math.PI, false);
+                ctx.lineWidth = 3;
+                ctx.fillStyle = "red";
+                ctx.fill();
                 ctx.stroke();
             }
+            function randLon(){
+                var min=-180;
+                var max=180;
+                var random = Math.random() * (+max - +min) + +min;
+                return random;
+            }
+            function randLat(){
+                var min=-90;
+                var max=90;
+                var random = Math.random() * (+max - +min) + +min;
+                return random;
+            }
+            function loadLoc(){
+                ctx.beginPath();
+                ctx.strokeStyle = "red";
+                ctx.moveTo(preLon, preLat);
+                preLon = lonTrans(randLon(), img.width);
+                preLat = latTrans(randLat(), img.height);
+                ctx.lineTo(preLon, preLat);
+                ctx.stroke();
+            }
+            var preLon = lonTrans(randLon(), img.width);
+            var preLat = latTrans(randLat(), img.height);
             loadCanvas();
-
+            setInterval(loadLoc, IntervalTime);
+            loadLoc();
         </script>
     </div>
 </body>

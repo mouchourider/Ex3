@@ -13,20 +13,32 @@ namespace Ex3.Models
 {
     public class Server
     { 
-        private TcpClient tcpClient;
+        public TcpListener listener;
+        public TcpClient client;
+        private string[] valuesFromSim = new string[24];
+        public Server(){}
 
-        public Server()
+        string[] ValuesFromSim
         {
-            tcpClient = new TcpClient();
+            get { return this.valuesFromSim; }
+            set { this.ValuesFromSim = value; }
         }
+
 
         public void Connect(string ip, int port)
         {
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ip), port);
-            tcpClient.Connect(ep);
+            listener = new TcpListener(ep);
+            listener.Start();
+            HandleClient();
         }
 
-        public double Get(string requestPath)
+        public void HandleClient()
+        {
+            client = listener.AcceptTcpClient();
+        }
+
+        /*public double Get(string requestPath)
         {
             int size = 2048;
             byte[] response = new byte[size];
@@ -46,11 +58,41 @@ namespace Ex3.Models
 
             // Get rid of quotation marks and converting the number to Double .
             return Convert.ToDouble(num.Substring(1, num.Length - 2));
+        }*/
+
+        public void ReadFromClient(TcpClient client)
+        {
+            Byte[] bytes;
+                NetworkStream ns = client.GetStream();
+                if (client.ReceiveBufferSize > 0)
+                {
+                    bytes = new byte[client.ReceiveBufferSize];
+                    ns.Read(bytes, 0, client.ReceiveBufferSize);
+                    string msg = Encoding.ASCII.GetString(bytes);
+                    EditMessage(msg);
+                }
+        }
+
+        void EditMessage(string Message)
+        {
+            string[] splitStr = Message.Split(',');
+            this.valuesFromSim = splitStr;
+            try
+            {
+                InfoModel.Instance.lon = Convert.ToDouble(splitStr[0]);
+                InfoModel.Instance.lat = Convert.ToDouble(splitStr[1]);
+                InfoModel.Instance.alt = Convert.ToDouble(splitStr[9]);
+                InfoModel.Instance.rud = Convert.ToDouble(splitStr[21]);
+                InfoModel.Instance.thr = Convert.ToDouble(splitStr[23]);
+            }
+            catch (Exception exception) { }
+
+            // MessageBox.Show(valuesFromSim[0]);
         }
 
         public void Stop()
         {
-            tcpClient.Close();
+            listener.Stop();
         }
 
     }
