@@ -1,6 +1,6 @@
 ﻿
 @{
-    Layout = null;
+    ViewBag.Title = "display";
 }
 
 <!DOCTYPE html>
@@ -16,11 +16,12 @@
     </span>
 
     <div>
-
+        <script src="~/scripts/jquery-3.0.0.min.js"> </script>
         <script>
-            var IntervalTime = @Session["time"] * 1000
             var img = document.getElementById("map");
             var imgs = new Image();
+            var Lon = 0;
+            var Lat = 0;
             imgs.src = './Images/map.png';
             var c = document.createElement("canvas");
             document.body.appendChild(c);
@@ -32,14 +33,6 @@
             ctx.clearRect(0, 0, c.width, c.height);
             function drawImage() {
                 ctx.drawImage(img, 0, 0);
-            }
-            function sleep(milliseconds) {
-              var start = new Date().getTime();
-              for (var i = 0; i < 1e7; i++) {
-                if ((new Date().getTime() - start) > milliseconds){
-                  break;
-                }
-              }
             }
             function lonTrans(l, w){
                 var half = w / 2;
@@ -93,11 +86,26 @@
                 ctx.moveTo(preLon, preLat);
                 preLon = lonTrans(randLon(), img.width);
                 preLat = latTrans(randLat(), img.height);
+                myTimer();
+                alert("lon: " + Lon + ", lat: " + Lat);
                 ctx.lineTo(preLon, preLat);
                 ctx.stroke();
             }
             var preLon = lonTrans(randLon(), img.width);
             var preLat = latTrans(randLat(), img.height);
+            var IntervalTime = @Session["time"] * 1000
+                    myTimer = (function () {
+                        $.post( "@Url.Action("GetLocation")").done(function (xml) {
+                                var xmlDoc = $.parseXML( xml ),
+                                $xml = $( xmlDoc ),
+                                Lon = $xml.find( "Lon" ).text();
+                                Lat = $xml.find( "Lat" ).text();
+
+                                $("#dataLon").text(Lon);
+                                $("#dataLat").text(Lat);
+
+                        });
+                    });
             loadCanvas();
             setInterval(loadLoc, IntervalTime);
             loadLoc();
