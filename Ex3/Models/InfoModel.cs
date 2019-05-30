@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.IO;
-
+using System.Xml;
 
 namespace Ex3.Models
 {
@@ -24,6 +24,17 @@ namespace Ex3.Models
             }
 
             public FlightData flightdata { get; private set; }
+
+            public Server server
+            {
+                get;
+                private set;
+            }
+            public double lon { get; set; }
+            public double lat { get; set; }
+            public double alt { get; set; }
+            public double rud { get; set; }
+            public double thr { get; set; }
             public string ip { get; set; }
             public string port { get; set; }
             public int time { get; set; }
@@ -31,6 +42,7 @@ namespace Ex3.Models
             public InfoModel()
             {
                 flightdata = new FlightData();
+                server = new Server();
             }
 
             public const string SCENARIO_FILE = "~/App_Data/{0}.txt";           // The Path of the Secnario
@@ -54,12 +66,19 @@ namespace Ex3.Models
                 else
                 {
                     string[] lines = System.IO.File.ReadAllLines(path);        // reading all the lines of the file
-                    flightdata.Location = lines[0];
+                    flightdata.Lon = int.Parse(lines[0]);
                     flightdata.Altitude = int.Parse(lines[1]);
                     flightdata.Direction = int.Parse(lines[2]);
                     flightdata.Speed = int.Parse(lines[3]);
             }
             }
-
+        public void ToXml(XmlWriter writer)
+        {
+            writer.WriteStartElement("Data");
+            writer.WriteElementString("Lon", this.lon.ToString());
+            writer.WriteElementString("Lat", this.lat.ToString());
+            writer.WriteEndElement();
         }
+
+    }
  }

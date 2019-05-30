@@ -22,6 +22,33 @@ namespace Ex3.Controllers
         [HttpGet]
         public ActionResult display(string ip, int port, int time)
         {
+            bool containsInt = ip.Any(char.IsDigit);
+            InfoModel.Instance.ip = ip;
+            InfoModel.Instance.port = port.ToString();
+            InfoModel.Instance.time = time;
+            InfoModel.Instance.server.Connect(ip, port);
+            if (containsInt) // Format -> ip/port/time -> Show the pass
+            {
+                ViewBag.Format = 1;
+                ViewBag.lon = InfoModel.Instance.lon;
+                ViewBag.lat = InfoModel.Instance.lat;
+
+                Session["time"] = time;
+                Session["Lon"] = InfoModel.Instance.lon;
+                Session["Lat"] = InfoModel.Instance.lat;
+            }
+            else // Format -> file/time -> 
+            {
+                ViewBag.Format = 0;
+                //Read datas written in flight1.
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult save(string ip, int port, int time, string file)
+        {
             InfoModel.Instance.ip = ip;
             InfoModel.Instance.port = port.ToString();
             InfoModel.Instance.time = time;
@@ -36,16 +63,17 @@ namespace Ex3.Controllers
 
 
         [HttpPost]
-        public string GetEmployee()
+        public string GetLocation()
         {
-            var emp = InfoModel.Instance.flightdata;
+            InfoModel.Instance.server.ReadFromClient(InfoModel.Instance.server.client);
+            var emp = InfoModel.Instance;
 
             /*emp.Salary = rnd.Next(1000);*/
 
             return ToXml(emp);
         }
 
-        private string ToXml(FlightData fd)
+        private string ToXml(InfoModel fd)
         {
             //Initiate XML stuff
             StringBuilder sb = new StringBuilder();
@@ -70,7 +98,7 @@ namespace Ex3.Controllers
         {
             InfoModel.Instance.ReadData(name);
 
-            return ToXml(InfoModel.Instance.flightdata);
+            return ToXml(InfoModel.Instance);
         }
 
     }
