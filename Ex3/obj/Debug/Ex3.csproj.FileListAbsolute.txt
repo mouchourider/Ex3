@@ -72,7 +72,6 @@ C:\Users\einav\source\repos\Ex3\Ex3\obj\Debug\Ex3.csprojAssemblyReference.cache
 C:\Users\einav\source\repos\Ex3\Ex3\obj\Debug\Ex3.csproj.CoreCompileInputs.cache
 C:\Users\einav\source\repos\Ex3\Ex3\obj\Debug\Ex3.dll
 C:\Users\einav\source\repos\Ex3\Ex3\obj\Debug\Ex3.pdb
-C:\Users\einav\source\repos\Ex3\Ex3\bin\App_Data\map.png
 C:\Users\einav\source\repos\Ex3\Ex3\bin\Ex3.dll.config
 C:\Users\einav\source\repos\Ex3\Ex3\bin\Ex3.dll
 C:\Users\einav\source\repos\Ex3\Ex3\bin\Ex3.pdb
