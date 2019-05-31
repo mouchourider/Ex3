@@ -43,7 +43,8 @@ namespace Ex3.Models
             {
                 flightdata = new FlightData();
                 server = new Server();
-            }
+                System.IO.File.WriteAllText(@"C:/Users/Francki/Desktop/Ex3/Ex3/App_Data/flight1.txt", string.Empty);
+        }
 
             public const string SCENARIO_FILE = "~/App_Data/{0}.txt";           // The Path of the Secnario
 
@@ -77,6 +78,9 @@ namespace Ex3.Models
             writer.WriteStartElement("Data");
             writer.WriteElementString("Lon", this.lon.ToString());
             writer.WriteElementString("Lat", this.lat.ToString());
+            writer.WriteElementString("Alt", this.alt.ToString());
+            writer.WriteElementString("Rud", this.rud.ToString());
+            writer.WriteElementString("Thr", this.thr.ToString());
             writer.WriteEndElement();
         }
 

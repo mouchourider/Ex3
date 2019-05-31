@@ -1,0 +1,37 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>save</title>
+</head>
+<body>
+    <div>
+        <script src="~/scripts/jquery-3.0.0.min.js"></script>
+        <script>
+            var Lon = 0;
+            var Lat = 0;
+            function loadLoc(){
+                myTimer();
+            }
+            var IntervalTime = @Session["time"] * 1000
+                    myTimer = (function () {
+                        $.post("@Url.Action("AddLocation")").done(function (xml) {
+                                var xmlDoc = $.parseXML( xml ),
+                                $xml = $( xmlDoc ),
+                                Lon = $xml.find( "Lon" ).text();
+                                Lat = $xml.find( "Lat" ).text();
+
+                                $("#dataLon").text(Lon);
+                                $("#dataLat").text(Lat);});
+                    });
+            setInterval(loadLoc, IntervalTime);
+        </script>
+    </div>
+</body>
+</html>

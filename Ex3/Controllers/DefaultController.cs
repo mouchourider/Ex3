@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using Ex3.Models;
+using System.IO;
 
 namespace Ex3.Controllers
 {
@@ -52,10 +53,10 @@ namespace Ex3.Controllers
             InfoModel.Instance.ip = ip;
             InfoModel.Instance.port = port.ToString();
             InfoModel.Instance.time = time;
-
-            /*InfoModel.Instance.ReadData("Dor");*/
+            InfoModel.Instance.server.Connect(ip, port);
 
             Session["time"] = time;
+
 
 
             return View();
@@ -71,6 +72,16 @@ namespace Ex3.Controllers
             /*emp.Salary = rnd.Next(1000);*/
 
             return ToXml(emp);
+        }
+        [HttpPost]
+        public string AddLocation()
+        {
+            InfoModel.Instance.server.ReadFromClient(InfoModel.Instance.server.client);
+            var emp = InfoModel.Instance;
+            string path = "C:/Users/Francki/Desktop/Ex3/Ex3/App_Data/flight1.txt";
+            string result = ToXml(emp);
+            System.IO.File.AppendAllText(path, result);
+            return result;
         }
 
         private string ToXml(InfoModel fd)
