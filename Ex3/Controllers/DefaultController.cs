@@ -67,7 +67,7 @@ namespace Ex3.Controllers
         {
             InfoModel.Instance.server.ReadFromClient(InfoModel.Instance.server.client);
             var emp = InfoModel.Instance;
-
+            System.Diagnostics.Debug.WriteLine("Lon: " + InfoModel.Instance.lon + ", Lat: " + InfoModel.Instance.lat + "\n");
             /*emp.Salary = rnd.Next(1000);*/
 
             return ToXml(emp);

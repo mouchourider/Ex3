@@ -86,8 +86,7 @@ namespace Ex3.Models
                 InfoModel.Instance.thr = Convert.ToDouble(splitStr[23]);
             }
             catch (Exception exception) { }
-
-            // MessageBox.Show(valuesFromSim[0]);
+            
         }
 
         public void Stop()
