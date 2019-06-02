@@ -78,7 +78,7 @@ namespace Ex3.Controllers
         {
             InfoModel.Instance.server.ReadFromClient(InfoModel.Instance.server.client);
             var emp = InfoModel.Instance;
-            string path = "C:/Users/Francki/Desktop/Ex3/Ex3/App_Data/flight1.txt";
+            string path = "~/App_Data/flight1.txt";
             string result = ToXml(emp);
             System.IO.File.AppendAllText(path, result);
             return result;
