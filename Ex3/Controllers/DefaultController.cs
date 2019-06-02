@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Xml;
 using Ex3.Models;
 using System.IO;
+using System.Xml.Linq;
 
 namespace Ex3.Controllers
 {
@@ -21,12 +22,22 @@ namespace Ex3.Controllers
         }
 
         [HttpGet]
-        public ActionResult display(string ip, int port, int time)
+        public ActionResult display(string ip, int port, int? time)
         {
+
             bool containsInt = ip.Any(char.IsDigit);
             InfoModel.Instance.ip = ip;
             InfoModel.Instance.port = port.ToString();
-            InfoModel.Instance.time = time;
+            if (time != null)
+            {
+                InfoModel.Instance.time = (int)time;
+                ViewBag.timeLoad = 1;
+            }
+            else
+            {
+                InfoModel.Instance.time = 0;
+                ViewBag.timeLoad = 0;
+            }
             InfoModel.Instance.server.Connect(ip, port);
             if (containsInt) // Format -> ip/port/time -> Show the pass
             {
@@ -34,9 +45,7 @@ namespace Ex3.Controllers
                 ViewBag.lon = InfoModel.Instance.lon;
                 ViewBag.lat = InfoModel.Instance.lat;
 
-                Session["time"] = time;
-                Session["Lon"] = InfoModel.Instance.lon;
-                Session["Lat"] = InfoModel.Instance.lat;
+                Session["time"] = InfoModel.Instance.time;
             }
             else // Format -> file/time -> 
             {
@@ -48,7 +57,7 @@ namespace Ex3.Controllers
         }
 
         [HttpGet]
-        public ActionResult save(string ip, int port, int time, string file)
+        public ActionResult save(string ip, int port, int time, int sessionT, string file)
         {
             InfoModel.Instance.ip = ip;
             InfoModel.Instance.port = port.ToString();
@@ -56,6 +65,7 @@ namespace Ex3.Controllers
             InfoModel.Instance.server.Connect(ip, port);
 
             Session["time"] = time;
+            Session["sTime"] = sessionT;
 
 
 
@@ -78,9 +88,27 @@ namespace Ex3.Controllers
         {
             InfoModel.Instance.server.ReadFromClient(InfoModel.Instance.server.client);
             var emp = InfoModel.Instance;
-            string path = "C:/Users/Francki/Desktop/Ex3/Ex3/App_Data/flight1.txt";
-            string result = ToXml(emp);
-            System.IO.File.AppendAllText(path, result);
+            string result = " ";
+            string path = "C:/Users/Francki/Desktop/Ex3/Ex3/App_Data/flight1.xml";
+            if (new FileInfo(path).Length <= 1)
+            {
+                ToXml(InfoModel.Instance, path);
+            }
+            else
+            {
+                XDocument xDocument = XDocument.Load(path);
+                XElement root = xDocument.Element("Datas");
+                IEnumerable<XElement> rows = root.Descendants("Data");
+                XElement firstRow = rows.First();
+                firstRow.AddBeforeSelf(
+                   new XElement("Data",
+                   new XElement("Lon", InfoModel.Instance.lon),
+                   new XElement("Lat", InfoModel.Instance.lat),
+                   new XElement("Rud", InfoModel.Instance.rud),
+                   new XElement("Thr", InfoModel.Instance.thr)));
+                xDocument.Save(path);
+            }
+            System.Diagnostics.Debug.WriteLine("result: " + result);
             return result;
         }
 
@@ -90,6 +118,7 @@ namespace Ex3.Controllers
             StringBuilder sb = new StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings();
             XmlWriter writer = XmlWriter.Create(sb, settings);
+            writer.WriteProcessingInstruction("xml", "version='1.0'");
 
             writer.WriteStartDocument();
             writer.WriteStartElement("Datas");
@@ -100,6 +129,25 @@ namespace Ex3.Controllers
             writer.WriteEndDocument();
             writer.Flush();
             return sb.ToString();
+        }
+
+        private void ToXml(InfoModel fd, string path)
+        {
+            //Initiate XML stuff
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.NewLineOnAttributes = true;
+            XmlWriter writer = XmlWriter.Create(path, settings);
+
+            writer.WriteStartDocument();
+            writer.WriteStartElement("Datas");
+
+            fd.ToXml(writer);
+
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+            writer.Flush();
+            writer.Close();
         }
 
 

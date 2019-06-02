@@ -58,7 +58,7 @@
                 }
                 return l;
             }
-            function loadCanvas(img) {
+            function loadCanvas() {
                 drawImage();
                 ctx.beginPath();
                 ctx.strokeStyle = "red";
@@ -107,8 +107,9 @@
                         });
                     });
             loadCanvas();
-            setInterval(loadLoc, IntervalTime);
-            loadLoc();
+            if (@ViewBag.timeLoad > 0) {
+                setInterval(loadLoc, IntervalTime);
+            }
         </script>
     </div>
 </body>
