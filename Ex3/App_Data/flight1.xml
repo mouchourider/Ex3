@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Datas>
+  <Data>
+    <Lon>-157.943192</Lon>
+    <Lat>21.325247</Lat>
+    <Rud>0</Rud>
+    <Thr>0.3</Thr>
+  </Data>
+  <Data>
+    <Lon>-157.907135</Lon>
+    <Lat>21.325245</Lat>
+    <Rud>0</Rud>
+    <Thr>0.3</Thr>
+  </Data>
+  <Data>
+    <Lon>-157.907135</Lon>
+    <Lat>21.325245</Lat>
+    <Alt>0</Alt>
+    <Rud>0</Rud>
+    <Thr>0.3</Thr>
+  </Data>
+</Datas>

@@ -14,9 +14,9 @@ namespace Ex3
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute("display", "display/{ip}/{port}/{time}",
-            defaults: new { controller = "Default", action = "display", port = UrlParameter.Optional, time = UrlParameter.Optional });
+            defaults: new { controller = "Default", action = "display", time = UrlParameter.Optional });
 
-            routes.MapRoute("save", "save/{ip}/{port}/{time}/{file}",
+            routes.MapRoute("save", "save/{ip}/{port}/{time}/{sessionT}/{file}",
             defaults: new { controller = "Default", action = "save" });
 
             routes.MapRoute(
