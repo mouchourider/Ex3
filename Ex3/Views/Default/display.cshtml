@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>display</title>
 </head>
-<body>
+<body background="~/Images/map.png" style="background-size:100% 100%; background-attachment:fixed">
     <span style="display:none;">
         <img id="map" onload="drawImage" src="~/Images/map.png" alt="The Map">
     </span>
@@ -24,6 +24,7 @@
             var Lat = 0;
             imgs.src = './Images/map.png';
             var c = document.createElement("canvas");
+            c.style="background-size:100% 100%; top:0; left:0; margin:0";
             document.body.appendChild(c);
             c.width = img.width;
             c.height = img.height;
@@ -59,9 +60,10 @@
                 return l;
             }
             function loadCanvas() {
-                drawImage();
+                //drawImage();
                 ctx.beginPath();
                 ctx.strokeStyle = "red";
+                myTimer();
                 ctx.arc(preLon, preLat, 20, 0, 20 * Math.PI, false);
                 ctx.lineWidth = 3;
                 ctx.fillStyle = "red";
@@ -84,23 +86,27 @@
                 ctx.beginPath();
                 ctx.strokeStyle = "red";
                 ctx.moveTo(preLon, preLat);
-                preLon = lonTrans(randLon(), img.width);
-                preLat = latTrans(randLat(), img.height);
+                //ctx.moveTo(Lon, Lat);
+                //preLon = lonTrans(randLon(), img.width);
+                //preLat = latTrans(randLat(), img.height);
+                //alert("preLon:" + preLon + ", preLat:" + preLat);
                 myTimer();
-                alert("lon: " + Lon + ", lat: " + Lat);
+                preLon = (Lon + 180) * (c.width / 360);
+                preLat = (Lat + 90) * (c.height / 180);
+                //alert("lon: " + Lon + ", lat: " + Lat);
                 ctx.lineTo(preLon, preLat);
                 ctx.stroke();
             }
-            var preLon = lonTrans(randLon(), img.width);
-            var preLat = latTrans(randLat(), img.height);
+            var preLon = (Lon + 180) * (c.width / 360);
+            var preLat = (Lat + 90) * (c.height / 180);
             var IntervalTime = @Session["time"] * 1000
                     myTimer = (function () {
                         $.post( "@Url.Action("GetLocation")").done(function (xml) {
-                                var xmlDoc = $.parseXML( xml ),
-                                $xml = $( xmlDoc ),
+                                var xmlDoc = $.parseXML(xml),
+                                $xml = $(xmlDoc);
                                 Lon = $xml.find( "Lon" ).text();
                                 Lat = $xml.find( "Lat" ).text();
-
+                                //alert("lon: " + Lon + ", lat: " + Lat);
                                 $("#dataLon").text(Lon);
                                 $("#dataLat").text(Lat);
 

@@ -16,6 +16,7 @@ namespace Ex3.Models
         public TcpListener listener;
         public TcpClient client;
         private string[] valuesFromSim = new string[24];
+        public bool serverStart = false;
         public Server(){}
 
         string[] ValuesFromSim
@@ -36,6 +37,7 @@ namespace Ex3.Models
         public void HandleClient()
         {
             client = listener.AcceptTcpClient();
+            this.serverStart = true;
         }
 
         /*public double Get(string requestPath)

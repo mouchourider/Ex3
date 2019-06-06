@@ -16,9 +16,10 @@
         <script>
             var Lon = 0;
             var Lat = 0;
-            var startTime = new Date().getTime();
-            var interval = setInterval(function(){
-                if(new Date().getTime() - startTime > @Session["sTime"] * 1000){
+            var startTime = 0;
+            var interval = setInterval(function () {
+                startTime++;
+                if(startTime >= @Session["sTime"]){
                     clearInterval(interval);
                     $.post("@Url.Action("closeXml")").done(function (xml) {
                                 var xmlDoc = $.parseXML( xml ),
@@ -28,15 +29,17 @@
 
                                 $("#dataLon").text(Lon);
                                 $("#dataLat").text(Lat);});
+                    alert("Datas Saved.")
                 }
                 $.post("@Url.Action("AddLocation")").done(function (xml) {
                                 var xmlDoc = $.parseXML( xml ),
                                 $xml = $( xmlDoc ),
                                 Lon = $xml.find( "Lon" ).text();
                                 Lat = $xml.find( "Lat" ).text();
-
+                                
                                 $("#dataLon").text(Lon);
-                                $("#dataLat").text(Lat);});
+                                $("#dataLat").text(Lat);
+                                alert(xml);});
             }, @Session["time"] * 1000);
         </script>
     </div>

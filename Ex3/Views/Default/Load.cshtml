@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "Load";
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Load</title>
+</head>
+
+<body>
+
+    <body background="~/Images/map.png" style="background-size:100% 100%; background-attachment:fixed">
+        <span style="display:none;">
+            <img id="map" onload="drawImage" src="~/Images/map.png" alt="The Map">
+        </span>
+
+        <div>
+            <script src="~/scripts/jquery-3.0.0.min.js"></script>
+            <script>
+            var img = document.getElementById("map");
+            var imgs = new Image();
+            var Lon = 0;
+            var Lat = 0;
+            imgs.src = './Images/map.png';
+            var c = document.createElement("canvas");
+            c.style="background-size:100% 100%; top:0; left:0; margin:0";
+            document.body.appendChild(c);
+            c.width = img.width;
+            c.height = img.height;
+            var ctx = c.getContext("2d");
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = '#00ff00';
+            ctx.clearRect(0, 0, c.width, c.height);
+            function drawImage() {
+                ctx.drawImage(img, 0, 0);
+            }
+            function loadCanvas() {
+                drawImage();
+                ctx.beginPath();
+                ctx.strokeStyle = "red";
+                myTimer();
+                preLon = (Lon + 180) * (c.width / 360);
+                preLat = (Lat + 90) * (c.width / 180);
+                ctx.arc(preLon, preLat, 20, 0, 20 * Math.PI, false);
+                ctx.lineWidth = 3;
+                ctx.fillStyle = "red";
+                ctx.fill();
+                ctx.stroke();
+            }
+            function randLon(){
+                var min=-180;
+                var max=180;
+                var random = Math.random() * (+max - +min) + +min;
+                return random;
+            }
+            function randLat(){
+                var min=-90;
+                var max=90;
+                var random = Math.random() * (+max - +min) + +min;
+                return random;
+            }
+            function loadLoc(){
+                ctx.beginPath();
+                ctx.strokeStyle = "red";
+                alert("Lon:" + Lon + ", Lat:" + Lat);
+                ctx.moveTo(preLon, preLat);
+                myTimer();
+                preLon = (Lon + 180) * (c.width / 360);
+                preLat = (Lat + 90) * (c.height / 180);
+                ctx.lineTo(preLon, preLat);
+                ctx.stroke();
+            }
+            var preLon = (Lon + 180) * (c.width / 360);
+            var preLat = (Lat + 90) * (c.width / 180);
+            var IntervalTime = @Session["time"] * 1000
+                    myTimer = (function () {
+                        $.post("@Url.Action("LoadFlightData")").done(function (xml) {
+                            alert(xml);
+                            if (xml === "stop") {
+                                clearInterval(interval);
+                                alert("Animation finished.")
+                            }
+                                var xmlDoc = $.parseXML( xml ),
+                                $xml = $( xmlDoc );
+                                Lon = $xml.find( "Lon" ).text();
+                                Lat = $xml.find( "Lat" ).text();
+                                $("#dataLon").text(Lon);
+                                $("#dataLat").text(Lat);
+
+                        });
+                    });
+            loadCanvas();
+            var interval = setInterval(loadLoc, IntervalTime);
+            loadLoc();
+            </script>
+        </div>
+    </body>
+</html>
+

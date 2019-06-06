@@ -90,6 +90,7 @@
   <ItemGroup>
     <Content Include="App_Data\flight1.xml" />
     <Content Include="Global.asax" />
+    <Content Include="Images\map.png" />
     <Content Include="scripts\ai.0.22.19-build00125.js" />
     <Content Include="scripts\ai.0.22.19-build00125.min.js" />
     <Content Include="scripts\bootstrap.js" />
@@ -112,6 +113,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClientSide.cs" />
     <Compile Include="Models\FlightData.cs" />
     <Compile Include="Models\InfoModel.cs" />
     <Compile Include="Models\Server.cs" />
@@ -126,6 +128,7 @@
     <Content Include="scripts\jquery-3.0.0.min.map" />
     <Content Include="scripts\jquery-3.0.0.slim.min.map" />
     <Content Include="Views\Default\save.cshtml" />
+    <Content Include="Views\Default\Load.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
